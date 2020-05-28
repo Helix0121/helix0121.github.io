@@ -39,8 +39,8 @@
 <meta property="og:image" content="http://helix.cool/2020/05/18/Padding-Oracle-Attack/seven.png">
 <meta property="og:image" content="http://helix.cool/2020/05/18/Padding-Oracle-Attack/seven_01.png">
 <meta property="og:image" content="http://helix.cool/2020/05/18/Padding-Oracle-Attack/final.png">
-<meta property="article:published_time" content="2020-05-18T01:48:20.000Z">
-<meta property="article:modified_time" content="2020-05-18T01:57:20.732Z">
+<meta property="article:published_time" content="2020-05-18T01:18:07.000Z">
+<meta property="article:modified_time" content="2020-05-18T02:08:20.670Z">
 <meta property="article:author" content="Helix">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://helix.cool/2020/05/18/Padding-Oracle-Attack/cbcencrypt.png">
@@ -291,7 +291,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">2.3k</span>Reading time: <span class="post-count reading-time">9 min</span></span>
+                        <span>Word count: <span class="post-count word-count">1.9k</span>Reading time: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -423,15 +423,15 @@ height:50vh;
         <h2 id="Padding-Oracle-Attack"><a href="#Padding-Oracle-Attack" class="headerlink" title="Padding Oracle Attack"></a>Padding Oracle Attack</h2><h4 id="概述和一些基础知识"><a href="#概述和一些基础知识" class="headerlink" title="概述和一些基础知识"></a>概述和一些基础知识</h4><p>​    在<code>Eurocrypt 2002</code>大会上，<code>Vaudenay</code>介绍了针对CBC模式的<code>“Padding Oracle Attack”</code>。他可以在不知道密钥的情况下，通过对padding bytes的尝试，还原明文，或者构造任意密文。</p>
 <p>​    在2010年的<code>BlackHat</code>欧洲大会上，<code>Juliano Rizzo</code>与<code>Thai Duong</code>介绍了“Padding Oracle”的实际攻击案例，并公布了ASP.NET存在的Padding Oracle问题。在2011年的<code>Pwnie Rewards</code>中，ASP.NET的这个漏洞被评为“最具价值的服务器端漏洞”。</p>
 <p>​    CBC加密模式回顾</p>
-<p><img src="/2020/05/18/Padding-Oracle-Attack/cbcencrypt.png" alt></p>
+<p>​    <img src="/2020/05/18/Padding-Oracle-Attack/cbcencrypt.png" alt></p>
 <p>​    CBC解密模式回顾</p>
-<p><img src="/2020/05/18/Padding-Oracle-Attack/cbcdecrypt.png" alt></p>
+<p>​    <img src="/2020/05/18/Padding-Oracle-Attack/cbcdecrypt.png" alt></p>
 <p>​    Padding Oracle Attack顾名思义，其关键点在于加密和解密是的填充(Padding),，所以关于Padding Oracle Attack我们首先要了解一下什么是Padding以及其规则。</p>
 <p>​    对于分组加密的模式，我们的明文可以为任意长度，但是由于分组加密的原理，我们的密文必须把分为规定大小的数据块，这也就意味着我们需要在分组时，对无法被数据填满的数据块进行一个填充，已得到一个完整的数据块。</p>
 <p>​    那么对于填充我们有一些标准，比较常见的是PKCS#5标准中定义的规则。：PKCS#5规定：明文的最后一个数据块包含N个字节的填充数据（N取决于明文最后一个块的数据长度）。（每个数据块8字节长）。</p>
 <p>​    关于PKCS#5标准可参考：<a href="https://www.di-mgt.com.au/cryptopad.html#PKCS5" target="_blank" rel="noopener">https://www.di-mgt.com.au/cryptopad.html#PKCS5</a></p>
 <p>​    我们看一张图</p>
-<p><img src="/2020/05/18/Padding-Oracle-Attack/padding.png" alt></p>
+<p>​    <img src="/2020/05/18/Padding-Oracle-Attack/padding.png" alt></p>
 <p>​    这里有一点要注意的是，对于AVOCADO这段明文，我们只填充一个字节的0x01；而对于PLANTAIN这段明文，我们则额外填充一个数据块，每个字节为0x08。因此我们总结一下填充规律，对于要加密的数据，其最后几个字节必须是以下几种情况：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data 0x01</span><br><span class="line">data 0x02 0x02</span><br><span class="line">data 0x03 0x03 0x03</span><br><span class="line">data 0x04 0x04 0x04 0x04</span><br><span class="line">data 0x05 0x05 0x05 0x05 0x05 </span><br><span class="line">data 0x06 0x06 0x06 0x06 0x06 0x06</span><br><span class="line">data 0x07 0x07 0x07 0x07 0x07 0x07 0x07</span><br><span class="line">data 0x08 0x08 0x08 0x08 0x08 0x08 0x08 0x08</span><br></pre></td></tr></table></figure>
 
@@ -447,13 +447,15 @@ height:50vh;
 <p>用户名（BRIAN），公司ID（12）及角色ID（12）：因此这里的明文是“<strong>BRIAN;12;2;</strong>”。以下则是经过加密的Query String实例，请注意加密后的UID参数使用了ASCII十六进制表示法。</p>
 <p><code>http://sampleapp/home.jsp?UID=7B216A634951170FF851D6CC68FC9537858795A28ED4AAC6</code></p>
 <p>实际情况中，攻击者是并不知道这里所对应的明文是多少的，但是作为一个示例，我们已经知道了明文、填充以及加密后的值，像这样：</p>
-<img src="/2020/05/18/Padding-Oracle-Attack/example.png" style="zoom:200%;">
+<img src="/2020/05/18/Padding-Oracle-Attack/example.png" style="width:1000px height:300px">
 
 <p>攻击者可以根据加密后值的长度来推测出数据块的大小。由于长度（这里是24）能被8整除但不能被16整除，因此可以得知数据块的大小是8个字节。现在我们来观察下加密和解密的内部实现，下图便展示了字节级别的运算方式，这对以后攻击方式的讨论很有帮助。请注意，其中带圆圈的加号表示XOR（异或）操作。</p>
 <p>所以加密过程如图：</p>
-<p><img src="/2020/05/18/Padding-Oracle-Attack/encrypt_process.png" alt></p>
+<img src="/2020/05/18/Padding-Oracle-Attack/encrypt_process.png" style="zoom:200%;">
+
 <p>解密过程：</p>
-<p><img src="/2020/05/18/Padding-Oracle-Attack/decrypt_process.png" alt></p>
+<img src="/2020/05/18/Padding-Oracle-Attack/decrypt_process.png" style="zoom:200%;">
+
 <p>解密过程结束后得到的最后一个数据块中，其结尾应该包含一个正确的填充序列，如果没有满足这点，那么加/解密程序会抛出一个padding异常。</p>
 <h4 id="利用Padding-Oracle进行解密"><a href="#利用Padding-Oracle进行解密" class="headerlink" title="利用Padding Oracle进行解密"></a>利用Padding Oracle进行解密</h4><p>现在我们考虑如何用Padding Oracle Attack进行一个解密。我们每次操作一个单独的加密块。</p>
 <p>这里我们先操作第一块也就是IV后面那块，在这个数据库前面加上全为NULL的IV值并发送过去：</p>
@@ -497,17 +499,8 @@ height:50vh;
 <p>源码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'config.php'</span>);   <span class="comment"># $key,$flag</span></span><br><span class="line">define(<span class="string">"METHOD"</span>, <span class="string">"aes-128-cbc"</span>);  <span class="comment">//定义加密方式</span></span><br><span class="line">define(<span class="string">"SECRET_KEY"</span>, $key);    <span class="comment">//定义密钥</span></span><br><span class="line">define(<span class="string">"IV"</span>,<span class="string">"6666666666666666"</span>);    <span class="comment">//定义初始向量 16个6</span></span><br><span class="line">define(<span class="string">"BR"</span>,<span class="string">'&lt;br&gt;'</span>);</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">'source'</span>]))header(<span class="string">'location:./index.php?source=1'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#var_dump($GLOBALS);   //听说你想看这个？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_encrypt</span><span class="params">($iv,$data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"--------encrypt---------"</span>.BR;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'IV:'</span>.$iv.BR;</span><br><span class="line">    <span class="keyword">return</span> base64_encode(openssl_encrypt($data, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, $iv)).BR;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_decrypt</span><span class="params">($iv,$data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> openssl_decrypt(base64_decode($data),METHOD,SECRET_KEY,OPENSSL_RAW_DATA,$iv) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'False'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">'method'</span>]==<span class="string">'encrypt'</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = IV;</span><br><span class="line">    $data = $flag;    </span><br><span class="line">    <span class="keyword">echo</span> aes_encrypt($iv,$data);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>($_GET[<span class="string">'method'</span>]==<span class="string">"decrypt"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = @$_POST[<span class="string">'iv'</span>];</span><br><span class="line">    $data = @$_POST[<span class="string">'data'</span>];</span><br><span class="line">    <span class="keyword">echo</span> aes_decrypt($iv,$data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"我摊牌了，就是懒得写前端"</span>.BR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">'source'</span>]==<span class="number">1</span>)highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>​    此题第一步就是一个Padding Oracle Attack。</p>
-<p>​    所以我们对密文进行一个解密：</p>
-<p>​    附一个大牛的脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="comment"># b'\x97.\xda\xb8\xa5P\t\x95\xae\x9b\xf5\xbf\xe2\x8b.&lt;'</span></span><br><span class="line">CYPHERTEXT = base64.b64decode(<span class="string">"ly7auKVQCZWum/W/4osuPA=="</span>)</span><br><span class="line"><span class="comment"># initialization vector</span></span><br><span class="line">IV = <span class="string">"6666666666666666"</span></span><br><span class="line"><span class="comment"># PKCS7 16个字节为1组</span></span><br><span class="line">N = <span class="number">16</span></span><br><span class="line"><span class="comment"># intermediaryValue ^ IV = plainText</span></span><br><span class="line">inermediaryValue = <span class="string">""</span></span><br><span class="line">plainText = <span class="string">""</span></span><br><span class="line"><span class="comment"># 爆破时不断需要更改的iv</span></span><br><span class="line">iv = <span class="string">""</span></span><br><span class="line">URL = <span class="string">"http://30c9178b-e009-4f04-84a7-6f335b57296e.node3.buuoj.cn/index.php?source=1&amp;method=decrypt"</span></span><br><span class="line">end = <span class="string">","</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xor</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    用于输出两个字符串对位异或的结果</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">""</span>.join([chr(ord(a[i]) ^ ord(b[i])) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(a))])</span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(<span class="number">1</span>, N + <span class="number">1</span>):</span><br><span class="line">    padding = chr(step) * (step - <span class="number">1</span>)</span><br><span class="line">    print(step,end)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">256</span>):</span><br><span class="line">        print(i)</span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        iv由三部分组成：</span></span><br><span class="line"><span class="string">            待爆破位置 chr(0)*(N-step) </span></span><br><span class="line"><span class="string">            正在爆破位置 chr(i) </span></span><br><span class="line"><span class="string">            使 iv[N-step+1:] ^ inermediaryValue = padding 的 xor(padding,inermediaryValue)</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        iv = chr(<span class="number">0</span>)*(N-step)+chr(i)+xor(padding,inermediaryValue)</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"data"</span>: <span class="string">"ly7auKVQCZWum/W/4osuPA=="</span>,</span><br><span class="line">            <span class="string">"iv"</span>: iv</span><br><span class="line">        &#125;</span><br><span class="line">        r = requests.post(URL,data = data)</span><br><span class="line">        <span class="keyword">if</span> r.text !=<span class="string">"False"</span>:</span><br><span class="line">            inermediaryValue = xor(chr(i),chr(step)) + inermediaryValue</span><br><span class="line">            print(inermediaryValue)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">plainText = xor(inermediaryValue,IV)</span><br><span class="line">print(plainText)</span><br></pre></td></tr></table></figure>
 
-<p>​    之后是一个字节翻转</p>
-<p>​    也是直接给脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bxor</span><span class="params">(b1, b2)</span>:</span> <span class="comment"># use xor for bytes</span></span><br><span class="line">    parts = []</span><br><span class="line">    <span class="keyword">for</span> b1, b2 <span class="keyword">in</span> zip(b1, b2):</span><br><span class="line">        parts.append(bytes([b1 ^ b2]))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">b''</span>.join(parts)</span><br><span class="line">iv = base64.b64decode(<span class="string">"aDKjJthK0pbOeSDJovOXlw=="</span>)</span><br><span class="line">text = <span class="string">b"piapiapiapia\x04\x04\x04\x04"</span></span><br><span class="line">result = <span class="string">b"weber\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b\x0b"</span></span><br><span class="line">middle = bxor(iv,text)</span><br><span class="line">iv = bxor(middle,result)</span><br><span class="line">print(base64.b64encode(iv))</span><br></pre></td></tr></table></figure>
 
-<p>​    之后得到一个Hello.class</p>
-<p>​    放进python中的bytearray就可以得到Flag了</p>
 <p>参考：<a href="https://blog.gdssecurity.com/labs/2010/9/14/automated-padding-oracle-attacks-with-padbuster.html" target="_blank" rel="noopener">https://blog.gdssecurity.com/labs/2010/9/14/automated-padding-oracle-attacks-with-padbuster.html</a></p>
 <p>​            <a href="https://www.freebuf.com/articles/web/15504.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/15504.html</a></p>
 
@@ -517,14 +510,19 @@ height:50vh;
         <div class="license-wrapper">
             <p>Author：<a href="http://helix.cool">Helix</a>
             <p>原文链接：<a href="http://helix.cool/2020/05/18/Padding-Oracle-Attack/">http://helix.cool/2020/05/18/Padding-Oracle-Attack/</a>
-            <p>发表日期：<a href="http://helix.cool/2020/05/18/Padding-Oracle-Attack/">May 18th 2020, 9:48:20 am</a>
-            <p>更新日期：<a href="http://helix.cool/2020/05/18/Padding-Oracle-Attack/">May 18th 2020, 9:57:20 am</a>
+            <p>发表日期：<a href="http://helix.cool/2020/05/18/Padding-Oracle-Attack/">May 18th 2020, 9:18:07 am</a>
+            <p>更新日期：<a href="http://helix.cool/2020/05/18/Padding-Oracle-Attack/">May 18th 2020, 10:08:20 am</a>
             <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/05/25/ThinkPHP%205.0.0-5.0.23%20RCE%20%E5%88%86%E6%9E%90%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91/" title= "ThinkPHP 5.0.0-5.0.23 RCE 分析【转载】">
+                    <div class="nextTitle">ThinkPHP 5.0.0-5.0.23 RCE 分析【转载】</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -692,9 +690,27 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 2
+        Total : 4
         </div>
         <!-- search  -->
         
@@ -707,6 +723,16 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2020/05/28/%E8%BF%91%E6%97%A5%E5%88%B7%E9%A2%98%E6%95%B4%E7%90%86/" >近日刷题整理.md</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/25</span><a class="archive-post-title" href= "/2020/05/25/ThinkPHP%205.0.0-5.0.23%20RCE%20%E5%88%86%E6%9E%90%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91/" >ThinkPHP 5.0.0-5.0.23 RCE 分析【转载】</a>
+        </li>
     
     
         <li class="archive-post-item">
