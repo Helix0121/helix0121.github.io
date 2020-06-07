@@ -356,13 +356,13 @@
     <article class="index-post">
         <a class="abstract-title" href = "/2020/06/07/MySQL/" >
             
-                <span>MySQL</span>
+                <span>Rogue MySQL</span>
         </a>
         <div class="abstract-content">
-            Rogue MySQL目录原理概述MySQL协议分析0x01 原理概述​    是个挺老的漏洞了，但是比赛还是会见到所以系统分析一下.
+            Rogue MySQL目录原理概述MySQL协议分析POC0x01 原理概述​    是个挺老的漏洞了，但是比赛还是会见到所以系统分析一下.
 ​    之前学SSRF的时候看到过SSRF to RCE MySQL，那时候也说了MySQL的对话式通信过程
 ​    大概就是客户端发送一个操作请求，服务端会根据客户端发送的请求对客户端进行一个响应。这里会出现这样一个问题，假如一个操作需要俩步请求来实现的时候，客户端在发送第一次请求后就不会保留这个请求，会直接把它丢掉，也就是说后续的请求要根据服务端的响应来做出，也就意味着服务端可以在这个过程中对客户端进行一个欺骗。
-​    但是一般的情况都是My...
+​    但是一般的情况都...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -583,7 +583,7 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">06/07</span><a class="archive-post-title" href= "/2020/06/07/MySQL/" >MySQL</a>
+            <span class="archive-post-date">06/07</span><a class="archive-post-title" href= "/2020/06/07/MySQL/" >Rogue MySQL</a>
         </li>
     
     
