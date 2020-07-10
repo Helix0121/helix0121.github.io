@@ -367,6 +367,68 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2020/07/09/%E6%8B%9F%E6%80%81%E9%98%B2%E5%BE%A1%E5%88%9D%E6%8E%A2.assets/RCTF2019/" >
+            
+                <span>拟态防御初探.assets/RCTF2019</span>
+        </a>
+        <div class="abstract-content">
+            const express = require('express')
+const bson = require('bson')
+const bodyParser = require('body-parser')
+const cluster = require('cluster')
+const app = express()
+
+if (cluster.isMaster) {
+  app.use(bodyParser.raw({ inflate: true, limit: '10kb', type: '*/*' }))
+
+  app.post('/', (req, res) => {
+   ...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/07/09</span>
+            </div>
+            <!-- tags  -->
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2020/07/09/%E6%8B%9F%E6%80%81%E9%98%B2%E5%BE%A1%E5%88%9D%E6%8E%A2/" >
+            
+                <span>拟态防御初探</span>
+        </a>
+        <div class="abstract-content">
+            现有防御体系的问题拟态防御一个在CTF中利用拟态防御思想的题目1.现有防御体系的问题​    拟态防御的出发点就是解决现阶段网络安全中不平衡态势的问题。
+​    概括来说 主要问题有这几点：
+​    1.网络环境存在未知的安全漏洞，是系统的安全策略的缺陷造成的，往往难以避免。
+​    2.软硬件都存在的后门问题，很多网络安全事件(如棱镜门)都反映出后门的问题在信息技术产品中是普遍存在的。
+​    3.未知漏洞后门和测信道的问题，测信道造成的安全隐患往往是无法或很难用物理或逻辑的方法彻底消除的。
+​    而面对这些主要问题，我们现有的防御系统是什么样的呢？
+​    现有的防御系...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/07/09</span>
+            </div>
+            <!-- tags  -->
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2020/06/13/Milkshake/" >
             
                 <span>Milkshake</span>
@@ -834,9 +896,33 @@ Chop Chop~~
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 7
+        Total : 9
         </div>
         <!-- search  -->
         
@@ -849,6 +935,16 @@ Chop Chop~~
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/09</span><a class="archive-post-title" href= "/2020/07/09/%E6%8B%9F%E6%80%81%E9%98%B2%E5%BE%A1%E5%88%9D%E6%8E%A2.assets/RCTF2019/" >拟态防御初探.assets/RCTF2019</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/09</span><a class="archive-post-title" href= "/2020/07/09/%E6%8B%9F%E6%80%81%E9%98%B2%E5%BE%A1%E5%88%9D%E6%8E%A2/" >拟态防御初探</a>
+        </li>
     
     
         <li class="archive-post-item">
